@@ -1,0 +1,45 @@
+body {
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 18px;
+}
+
+#wrapper {
+	display: inline-flex;
+	width: 90vw;
+	margin-left: 5vw;
+	overflow-x: scroll;
+}
+
+#wrapper:after {
+	position: absolute;
+	z-index: 5;
+	content: "";
+	width: 90vw;
+	height: 500px;
+	background: linear-gradient(90deg, #fff, transparent 3%, transparent 97%, #fff);
+}
+img {
+	float: left;
+	width: 300px;
+	height: 200px;
+	box-shadow: 0px 10px 10px 2px #0003;
+}
+
+.card {
+	display: block;
+	width: 300px;
+	box-shadow: 0px 10px 10px 2px #0003;
+	margin: 10px 30px 20px 30px;
+}
+
+.card h2 {
+	margin: 215px 20px 10px 20px;
+}
+
+.card p {
+	margin: 10px 20px 10px 20px;
+}
+
+.card .title {
+	left: 50px;
+}
