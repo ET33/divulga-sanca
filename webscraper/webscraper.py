@@ -7,15 +7,13 @@ from firebase import firebase   # firebase da biblioteca python-firebase
 # Conecta com o firebase configurado
 fb = firebase.FirebaseApplication('https://eng-soft-f1c51.firebaseio.com', None)
 
-
 # Pega os eventos contidos no nó 'path' do firebase
 def getFirebase(path):
 	result = fb.get(path, None)
 	print(result)
 
 # Posta um evento no firebase
-def postFirebase(json, path):
-	user = 'admin'
+def postFirebase(path, json):
 	result = fb.post(path, json)
 	print(result)
 
@@ -59,10 +57,8 @@ def getICMC():
 		else :					# Link Externo
 			data['href'] = l['href']
 
-		# pega o dicionário, transforma em um JSON e posta no firebase 
-		json_data = json.dumps(data)
-		print(json_data)
-		postFirebase(json_data, '/events')
+		# pega o dicionário, e posta no firebase 
+		postFirebase('/events', data)
 
 # Main
 def main():
