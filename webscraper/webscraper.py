@@ -33,6 +33,32 @@ def getMoreInfo(url, data, _class):
 	res = re.sub(r'\s+', ' ', line ).strip()	
 	data['tags'].append(res)
 
+#Pega informações do site da UFSCar
+def getUFSCar():
+	url = 'https://www2.ufscar.br/eventos'
+	soup = load(url)
+	
+	#Faz uma lista de todos os eventos do HTML do site
+	links = soup.select('tr')
+	ll = list(links)
+	
+	#Para todos os eventos listados...
+	for l in ll:
+		children = l.findChildren()
+		
+		#print(children)
+		
+		#Pegar data e nome do evento
+		data = {}
+		data['date'] = children[0].get_text()
+		print("date: " + data['date'])
+		data['title'] = children[1].get_text()
+		print("title: " + data['title'])
+		data['tags'] = ['ICMC', 'Eventos']
+		
+		
+		
+	
 # Pega as informações do site do ICMC
 def getICMC():
 	url = 'https://www.icmc.usp.br/eventos'
@@ -66,8 +92,9 @@ def getICMC():
 
 # Main
 def main():
-	getICMC()
-	getFirebase('/events')
+	getUFSCar()
+	#getICMC()
+	#getFirebase('/events')
 
 if __name__ == '__main__':
 	main()
