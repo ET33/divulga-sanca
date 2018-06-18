@@ -46,16 +46,25 @@ def getUFSCar():
 	for l in ll:
 		children = l.findChildren()
 		
-		#print(children)
-		
 		#Pegar data e nome do evento
 		data = {}
 		data['date'] = children[0].get_text()
 		print("date: " + data['date'])
 		data['title'] = children[1].get_text()
 		print("title: " + data['title'])
-		data['tags'] = ['ICMC', 'Eventos']
+		data['tags'] = ['UFSCar', 'Eventos']
 		
+		#Dentre as informações contidas em a...
+		a = l.find('a')		
+		#pegar o href que contem o link
+		data['href'] = a.get('href')
+		
+		print("link: " + data['href'])
+		
+		# pega o dicionário, transforma em um JSON e posta no firebase 
+		json_data = json.dumps(data)
+		print(json_data + '\n')
+		postFirebase(json_data, '/events')
 		
 		
 	
@@ -93,8 +102,8 @@ def getICMC():
 # Main
 def main():
 	getUFSCar()
-	#getICMC()
-	#getFirebase('/events')
+	getICMC()
+	getFirebase('/events')
 
 if __name__ == '__main__':
 	main()
