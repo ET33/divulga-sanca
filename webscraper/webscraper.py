@@ -89,39 +89,7 @@ def getICMC():
 			getMoreInfo(data['href'], data, '.caixa-noticia-categoria')
 		else :					# Link Externo
 			data['href'] = l['href']
-
-
-#Pega informações do site da UFSCar
-def getUFSCar():
-	url = 'https://www2.ufscar.br/eventos'
-	soup = load(url)
 	
-	#Faz uma lista de todos os eventos do HTML do site
-	links = soup.select('tr')
-	ll = list(links)
-	
-	#Para todos os eventos listados...
-	for l in ll:
-		children = l.findChildren()
-		
-		#Pegar data e nome do evento
-		data = {}
-		data['date'] = children[0].get_text()
-		print("date: " + data['date'])
-		data['title'] = children[1].get_text()
-		print("title: " + data['title'])
-		data['tags'] = ['UFSCar', 'Eventos']
-		
-		#Dentre as informações contidas em a...
-		a = l.find('a')		
-		#pegar o href que contem o link
-		data['href'] = a.get('href')
-		
-		print("link: " + data['href'])
-		
-		# pega o dicionário, transforma em um JSON e posta no firebase 
-		postFirebase(data, '/events')
-		
 		
 # Main
 def main():
