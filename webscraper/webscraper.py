@@ -89,7 +89,7 @@ def getICMC():
 			getMoreInfo(data['href'], data, '.caixa-noticia-categoria')
 		else :					# Link Externo
 			data['href'] = l['href']
-	
+
 		
 # Main
 def main():
