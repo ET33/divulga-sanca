@@ -15,7 +15,6 @@ def getFirebase(path):
 
 # Posta um evento no firebase
 def postFirebase(json, path):
-	user = 'admin'
 	result = fb.post(path, json)
 	print(result)
 
@@ -62,9 +61,7 @@ def getUFSCar():
 		print("link: " + data['href'])
 		
 		# pega o dicionário, transforma em um JSON e posta no firebase 
-		json_data = json.dumps(data)
-		print(json_data + '\n')
-		postFirebase(json_data, '/events')
+		postFirebase(data, '/events')
 		
 		
 	
@@ -102,8 +99,8 @@ def getICMC():
 # Main
 def main():
 	getUFSCar()
-	getICMC()
-	getFirebase('/events')
+	#getICMC()
+	#getFirebase('/events')
 
 if __name__ == '__main__':
 	main()
