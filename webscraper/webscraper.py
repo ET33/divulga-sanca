@@ -60,7 +60,7 @@ def getUFSCar():
 		print("link: " + data['href'])
 		
 		# pega o dicionário, transforma em um JSON e posta no firebase 
-		postFirebase(data, '/events')
+		postFirebase('/events', data)
 		
 		
 	
@@ -89,6 +89,8 @@ def getICMC():
 			getMoreInfo(data['href'], data, '.caixa-noticia-categoria')
 		else :					# Link Externo
 			data['href'] = l['href']
+			
+		postFirebase('/events', data)
 
 		
 # Main
