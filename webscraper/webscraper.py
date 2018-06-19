@@ -92,15 +92,13 @@ def getICMC():
 			data['href'] = l['href']
 
 		# pega o dicionário, transforma em um JSON e posta no firebase 
-		json_data = json.dumps(data)
-		print(json_data)
-		postFirebase(json_data, '/events')
+		postFirebase(data, '/events')
 
 # Main
 def main():
 	getUFSCar()
-	#getICMC()
-	#getFirebase('/events')
+	getICMC()
+	getFirebase('/events')
 
 if __name__ == '__main__':
 	main()
