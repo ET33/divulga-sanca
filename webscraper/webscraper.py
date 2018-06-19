@@ -13,11 +13,7 @@ def getFirebase(path):
 	print(result)
 
 # Posta um evento no firebase
-<<<<<<< HEAD
-def postFirebase(json, path):
-=======
 def postFirebase(path, json):
->>>>>>> master
 	result = fb.post(path, json)
 	print(result)
 
@@ -94,13 +90,6 @@ def getICMC():
 		else :					# Link Externo
 			data['href'] = l['href']
 
-<<<<<<< HEAD
-		# pega o dicionário, transforma em um JSON e posta no firebase 
-		postFirebase(data, '/events')
-=======
-		# pega o dicionário, e posta no firebase 
-		postFirebase('/events', data)
->>>>>>> master
 
 #Pega informações do site da UFSCar
 def getUFSCar():
