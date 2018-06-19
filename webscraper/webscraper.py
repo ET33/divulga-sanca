@@ -136,7 +136,6 @@ def getUFSCar():
 		
 # Main
 def main():
-	getUFSCar()
 	getICMC()
 	getUFSCar()
 	getFirebase('/events')
