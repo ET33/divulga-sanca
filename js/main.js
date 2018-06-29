@@ -17,6 +17,7 @@ Pega os nós contidos no nó 'events' do firebase
 e roda a função parseEvent para cada um deles
 */
 
+	
 function getEvents(){
 	var db = firebase.database();
 
@@ -35,11 +36,21 @@ function getEvents(){
 		});
 	});
     */
-
+	
+	/*
     // Quando carregar um nó filho do firebase
 	leadsRef.on('child_added', function(snapshot) {
         // Faz parse para JSON e processa a bagaça
         parseEvent(JSON.parse(snapshot._e.T));
+	});*/
+	
+	firebase.database().ref('/events').on('child_added', function(snapshot) {
+		var addedEvent = JSON.stringify(snapshot.val());
+		addedEvent = JSON.parse(addedEvent);
+		for (key in addedEvent) {
+			console.log(addedEvent[key]);
+			parseEvent(addedEvent[key]);
+		}
 	});
 }
 
