@@ -47,11 +47,11 @@ function getEvents(){
 	firebase.database().ref('/events').on('child_added', function(snapshot) {
 		var algo = JSON.stringify(snapshot.val());
 		algo = JSON.parse(algo);
-		//console.log(algo["-LG70lTPUIARBZUPcQIh"]);
-		parseEvent(algo["-LG70lTPUIARBZUPcQIh"]);
+		for (x in algo) {
+			console.log(algo[x]);
+			parseEvent(algo[x]);
+		}
 	});
-
-	//parseEvent(leadsRef);
 }
 
 /*
