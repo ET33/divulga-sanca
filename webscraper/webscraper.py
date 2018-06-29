@@ -24,7 +24,7 @@ def load(url):
 	return soup
 
 # Pega as tags contidas nos links dos eventos próprios do ICMC
-def getMoreInfo(url, data, _class):
+def getMoreInfoICMC(url, data, _class):
 	soup = load(url)
 	links = soup.select(_class)
 	line = links[0].get_text()
@@ -82,15 +82,46 @@ def getICMC():
 		# Configura o link do evento
 		if l['href'][0] == '/':	# Link Interno
 			data['href'] = 'https://www.icmc.usp.br' + l['href']
-			getMoreInfo(data['href'], data, '.caixa-noticia-categoria')
+			getMoreInfoICMC(data['href'], data, '.caixa-noticia-categoria')
 		else :					# Link Externo
 			data['href'] = l['href']
 		
 		postFirebase('/events/ICMC', data)
 
+def getSESC():
+	url = 'https://www.sescsp.org.br/unidades/ajax/agenda-filtro.action?id=21&maxResults=1000'
+	soup = load(url)
+
+	# Seleciona o HTML aonde está os dados do evento e transforma em uma lista
+	links = soup.select('.block_agenda')
+	ll = list(links)
+
+	#percorre a lista e monta um dicionário de cada um dos eventos
+	for l in ll:
+		children = l.findChildren()
+		
+		# busca a data do evento  
+		date = l.find_all('span')[1:3]
+		# aplica um regex na data para retirar espaços e pulos de linha desnecessários
+		for i in range(0, 2):
+			date[i] = re.search(r'([\S].*[\S])', date[i].text).group()
+		#junta as informações de dia com as informações de horário em uma string
+		date_formated = date[0] + ' ' + date[1]
+
+		#busca e formata a informação de endereço da imagem
+		img = re.search(r'url\((.*)\)', children[4]['style']).group(1)
+
+		data = {}
+		data['title'] = children[3]['data-ga-action']
+		data['date'] = date_formated
+		data['tags'] = l.find('strong').text
+		data['img'] =  'https://www.sescsp.org.br' + img
+		data['href'] = 'https://www.sescsp.org.br' + l.find('a', {'class' :'desc'})['href']
+
+		postFirebase('/events/SESC', data)
+	
 def deleteData(path):
 	result = fb.delete(path, None)
-	
 		
 # Main
 def main():
