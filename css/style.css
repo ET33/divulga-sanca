@@ -3,6 +3,11 @@ body {
 	font-size: 18px;
 }
 
+.input_field {
+	width: 200px;
+	font-size: 12px;
+}
+
 #wrapper {
 	display: inline-flex;
 	width: 90vw;

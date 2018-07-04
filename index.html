@@ -1,18 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta charset="utf-8">
 	<title>DivulgaSanca</title>
 	<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/style.css">	
 </head>
 <body>
-<!-- É aqui aonde vou colocar os cards dos eventos -->
-<div id='wrapper'>
-</div>
-<!-- Dependencias -->
-<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-<script type="text/javascript" src='js/main.js'></script>
-<script type="text/javascript" src='js/main.js'></script>
+	<div class="container">
+		<div class="row">
+			<div class="col s11">
+				<!-- TextBox -->
+				<div class="input-field">
+					<input type="text">
+				</div>
+			</div>
+			<div class="cols1">
+				<i class="material-icons">search</i>
+			</div>
+		</div>
+		
+		<!-- É aqui aonde vou colocar os cards dos eventos -->
+		<div id='wrapper'>
+		</div>
+	</div>
+	<!-- Dependencias -->
+	<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+	<script type="text/javascript" src='js/main.js'></script>
+	<!--JavaScript at end of body for optimized loading-->
+	<script type="text/javascript" src="js/materialize.min.js"></script>
 </body>
 </html>

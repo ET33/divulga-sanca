@@ -12,6 +12,14 @@ function configFirebase(){
 	firebase.initializeApp(config);
 }
 
+
+function doSomethingWithTextBox()
+{
+  var textBox = document.getElementById('TEXTBOX_ID');
+
+}
+
+
 /* 
 Pega os nós contidos no nó 'events' do firebase 
 e roda a função parseEvent para cada um deles
