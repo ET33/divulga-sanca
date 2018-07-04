@@ -45,11 +45,19 @@ function getEvents(){
 	});*/
 	
 	firebase.database().ref('/events').on('child_added', function(snapshot) {
+<<<<<<< HEAD
 		var algo = JSON.stringify(snapshot.val());
 		algo = JSON.parse(algo);
 		for (x in algo) {
 			console.log(algo[x]);
 			parseEvent(algo[x]);
+=======
+		var addedEvent = JSON.stringify(snapshot.val());
+		addedEvent = JSON.parse(addedEvent);
+		for (key in addedEvent) {
+			console.log(addedEvent[key]);
+			parseEvent(addedEvent[key]);
+>>>>>>> master
 		}
 	});
 }
