@@ -87,18 +87,7 @@ def getICMC():
 			data['href'] = l['href']
 		
 		postFirebase('/events/ICMC', data)
-<<<<<<< HEAD
 
-def deleteData(path):
-	result = fb.delete(path, None)
-	
-		
-# Main
-def main():
-	#deleteData('/events')
-	#getICMC()
-	#getUFSCar()
-=======
 
 def getSESC():
 	url = 'https://www.sescsp.org.br/unidades/ajax/agenda-filtro.action?id=21&maxResults=1000'
@@ -137,7 +126,6 @@ def deleteData(path):
 		
 # Main
 def main():
->>>>>>> master
 	getFirebase('/events')
 
 if __name__ == '__main__':
