@@ -3,8 +3,8 @@ body {
 	font-size: 18px;
 }
 
-.input-field input{
-	width: 50px;
+.card-small {
+	width:300px;
 }
 
 #wrapper {
