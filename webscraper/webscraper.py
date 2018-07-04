@@ -10,12 +10,11 @@ fb = firebase.FirebaseApplication('https://eng-soft-f1c51.firebaseio.com', None)
 # Pega os eventos contidos no nó 'path' do firebase
 def getFirebase(path):
 	result = fb.get(path, None)
-	print(result)
+	return result
 
 # Posta um evento no firebase
 def postFirebase(path, json):
 	result = fb.post(path, json)
-	print(result)
 
 # Carrega uma página e retorna uma estrutura navegável do bs4
 def load(url):
@@ -67,8 +66,6 @@ def getUFSCar():
 		# pega o dicionário, transforma em um JSON e posta no firebase 
 		postFirebase('/events/UFSCar', data)
 		
-		
-	
 # Pega as informações do site do ICMC
 def getICMC():
 	url = 'https://www.icmc.usp.br/eventos'
@@ -105,6 +102,7 @@ def getICMC():
 			
 		postFirebase('/events/ICMC', data)
 
+# Pega as informações do site do SESC
 def getSESC():
 	url = 'https://www.sescsp.org.br/unidades/ajax/agenda-filtro.action?id=21&maxResults=1000'
 	soup = load(url)
@@ -139,10 +137,39 @@ def getSESC():
 	
 def deleteData(path):
 	result = fb.delete(path, None)
-		
+
+# Busca dentro de um diretorio de eventos
+def searchInDir(path, key, tag):
+	
+	events = getFirebase(path)
+	result = []
+	
+	for i in events:
+		if(events[i][tag] == key):
+			result.append(events[i])
+	return result
+			
+# Busca os ventos pela data de inicio
+def searchingForStartDate(key):
+	
+	# Lista dos eventos encontrados
+	result = []
+	
+	# Buscando no ICMC
+	result.extend(searchInDir('events/ICMC',key,'startDate'))
+	
+	# Buscando na Ufscar
+	result.extend(searchInDir('events/UFSCar',key,'startDate'))
+	
+	for r in result:
+		print(r['title'])
+
 # Main
 def main():
-	getFirebase('/events')
+	deleteData('/events/')
+	getICMC()
+	getUFSCar()
+	searchingForStartDate("25/07/2018")
 	
 if __name__ == '__main__':
 	main()
