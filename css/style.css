@@ -3,9 +3,8 @@ body {
 	font-size: 18px;
 }
 
-.input_field {
-	width: 200px;
-	font-size: 12px;
+.input-field input{
+	width: 50px;
 }
 
 #wrapper {

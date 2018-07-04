@@ -14,21 +14,37 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">	
 </head>
 <body>
-	<div class="container">
+	<div class="container indigo lighten-4">
 		<div class="row">
-			<div class="col s11">
-				<!-- TextBox -->
-				<div class="input-field">
-					<input type="text">
-				</div>
+			<div class="col s3">
+				<a class="btn dropdown-trigger indigo lighten-3" href="#!" data-target="dropdown1" data-activates="dropdown1">Filtros<i class="material-icons right">arrow_drop_down</i></a>
+				<ul id="dropdown1" class="dropdown-content">
+					<li><a href="#!">Data<span class="badge"></span></a></li>
+					<li><a href="#!">TAGS<span class="badge"></span></a></li>
+					<li><a href="#!">Titulo</a></li>
+				</ul>
 			</div>
-			<div class="cols1">
-				<i class="material-icons">search</i>
+			<div class="col s9">
+				<nav>
+					<div class="nav-wrapper">
+					  <form>
+						<div class="input-field indigo lighten-5">
+						  <input id="search" type="search" required>
+						  <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+						  <i class="material-icons">close</i>
+						</div>
+					  </form>
+					</div>
+				</nav>
 			</div>
 		</div>
 		
-		<!-- É aqui aonde vou colocar os cards dos eventos -->
-		<div id='wrapper'>
+		<div class="row">
+			<div class="col s1">
+				<!-- É aqui aonde vou colocar os cards dos eventos -->
+				<div id='wrapper'>
+				</div>
+			</div>
 		</div>
 	</div>
 	<!-- Dependencias -->
@@ -36,5 +52,11 @@
 	<script type="text/javascript" src='js/main.js'></script>
 	<!--JavaScript at end of body for optimized loading-->
 	<script type="text/javascript" src="js/materialize.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+		var elems = document.querySelectorAll('.dropdown-trigger');
+		var instances = M.Dropdown.init(elems);
+		});
+	</script>
 </body>
 </html>
