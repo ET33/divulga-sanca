@@ -46,7 +46,16 @@ def getUFSCar():
 		
 		#Pegar data e nome do evento
 		data = {}
-		data['date'] = children[0].get_text()
+		#Pega a string da data
+		dateString =  re.findall(r'(\d{1,2}\/\d{1,2}\/\d{2,4})',children[0].get_text()) 
+		#Pega a data de início
+		data['startDate'] = dateString[0]
+		#Se tiver data de fim pegue, senão deixa vazio
+		if(len(dateString) > 1):
+			data['endDate'] = dateString[1]
+		else:
+			data['endDate'] = ""
+			
 		data['title'] = children[1].get_text()
 		data['tags'] = ['UFSCar', 'Eventos']
 		
@@ -74,8 +83,16 @@ def getICMC():
 		children = l.findChildren()
 
 		data = {}
+		#Pega a string da data
+		dateString = re.findall(r'(\d{1,2}\/\d{1,2}\/\d{2,4})',children[3].get_text()) 
+		#Pega a data de início
+		data['startDate'] = dateString[0]
+		#Se tiver data de fim pegue, senão deixa vazio
+		if(len(dateString) > 1):
+			data['endDate'] = dateString[1]
+		else:
+			data['endDate'] = ""
 		data['title'] = children[2].get_text()
-		data['date'] = children[3].get_text()
 		data['tags'] = ['ICMC', 'Eventos']
 		data['img'] =  'https://www.icmc.usp.br' + children[0]['src']
 
@@ -85,7 +102,7 @@ def getICMC():
 			getMoreInfoICMC(data['href'], data, '.caixa-noticia-categoria')
 		else :					# Link Externo
 			data['href'] = l['href']
-		
+			
 		postFirebase('/events/ICMC', data)
 
 def getSESC():
@@ -117,7 +134,7 @@ def getSESC():
 		data['tags'] = l.find('strong').text
 		data['img'] =  'https://www.sescsp.org.br' + img
 		data['href'] = 'https://www.sescsp.org.br' + l.find('a', {'class' :'desc'})['href']
-
+		
 		postFirebase('/events/SESC', data)
 	
 def deleteData(path):
@@ -126,6 +143,6 @@ def deleteData(path):
 # Main
 def main():
 	getFirebase('/events')
-
+	
 if __name__ == '__main__':
 	main()
