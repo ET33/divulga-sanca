@@ -19,6 +19,7 @@ def home():
     
 	return render_template('index.html', cards=allEvents)
 	
-	
+
+
 if __name__ == '__main__':
 	app.run(debug=True)

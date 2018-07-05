@@ -18,12 +18,12 @@
 		<div class="row">
 			<!-- Seleciona as tres primeiras colunas para adicionar um dropdown -->
 			<div class="col s3">
-				  <label>Filtros</label>
-				  <select class="browser-default">
-					<option value="" disabled selected>Ordenar por</option>
-					<option value="1">Data</option>
-					<option value="2">Titulo</option>
-				  </select>
+				<label>Filtros</label>
+				<select class="browser-default" name="tipo">
+					<option value="" disabled selected>Pesquisar por</option>
+					<option value="date">Data</option>
+					<option value="title">Titulo</option>
+				</select>
 			</div>
 			<!-- Seleciona as 9 colunas restantes para adicionar um search bar -->
 			<div class="col s9">
@@ -71,7 +71,7 @@
 					<p>
 					  <label>
 						<input type="checkbox" />
-						<span>EESC</span>
+						<span>SESC</span>
 					  </label>
 					</p>
 				</form>
@@ -83,7 +83,7 @@
 		
 		<div class="row">
 			<!-- É aqui aonde vou colocar os cards dos eventos -->
-			{%for x in cards%}
+			{% for x in cards %}
 				<div class="col s6">
 					<div class="card">
 						<div class="card-image waves-effect waves-block waves-light">
@@ -95,13 +95,13 @@
 						</div>
 						<div class="card-reveal">
 							<span class="card-title grey-text text-darken-4">{{ x['title'] }}<i class="material-icons right">close</i></span>
-							{%for y in x['tags']%}
-							<p>{{ x['tags'][y] }}</p>
-							{%endfor%}
+							{% for tag in x['tags'] %}
+								<p>{{ tag }}</p>
+							{% endfor %}
 						</div>
 					 </div>
 				</div>
-			{%endfor%}
+			{% endfor %}
 		</div>
 	</div>
 	<!-- Dependencias -->
