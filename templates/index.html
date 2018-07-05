@@ -87,15 +87,17 @@
 				<div class="col s6">
 					<div class="card">
 						<div class="card-image waves-effect waves-block waves-light">
-							<img class="activator" src="{{ url_for('static',filename='images/icmc.png') }}">
+							<img class="activator" src="{{ x['img'] }}">
 						</div>
 						<div class="card-content">
-							<span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
-							<p><a href="#">This is a link</a></p>
+							<span class="card-title activator grey-text text-darken-4">{{ x['title'] }}<i class="material-icons right">more_vert</i></span>
+							<p><a href="{{ x['href'] }}">Link do evento</a></p>
 						</div>
 						<div class="card-reveal">
-							<span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
-							<p>Here is some more information about this product that is only revealed once clicked on.</p>
+							<span class="card-title grey-text text-darken-4">{{ x['title'] }}<i class="material-icons right">close</i></span>
+							{%for y in x['tags']%}
+							<p>{{ x['tags'][y] }}</p>
+							{%endfor%}
 						</div>
 					 </div>
 				</div>
