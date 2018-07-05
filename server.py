@@ -16,6 +16,11 @@ def home():
 	
 	for i in events:
 		allEvents.append(events[i])
+		
+	events = getFirebase('/events/SESC')
+	
+	for i in events:
+		allEvents.append(events[i])
     
 	return render_template('index.html', cards=allEvents)
 	

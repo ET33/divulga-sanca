@@ -172,6 +172,7 @@ def main():
 	deleteData('/events/')
 	getICMC()
 	getUFSCar()
+	getSESC()
 	searchingForStartDate("25/07/2018")
 
 	
