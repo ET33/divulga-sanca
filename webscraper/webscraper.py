@@ -14,7 +14,8 @@ def getFirebase(path):
 
 # Posta um evento no firebase
 def postFirebase(path, json):
-	result = fb.post(path, json)
+	treated_title = re.sub(r'[/]', '_', json['title'])
+	result = fb.patch(path + '/' + treated_title, json)
 
 # Carrega uma página e retorna uma estrutura navegável do bs4
 def load(url):
@@ -57,7 +58,8 @@ def getUFSCar():
 			
 		data['title'] = children[1].get_text()
 		data['tags'] = ['UFSCar', 'Eventos']
-		
+		# Coloca a imagem do logo da ufscar para o dado
+		data['img'] = "http://tecnologiademateriais.com.br/portaltm/wp-content/uploads/2018/02/logo_ufscar.png"
 		#Dentre as informações contidas em a...
 		a = l.find('a')		
 		#pegar o href que contem o link
@@ -145,8 +147,9 @@ def searchInDir(path, key, tag):
 	result = []
 	
 	for i in events:
-		if(events[i][tag] == key):
-			result.append(events[i])
+		print(events[i][tag])
+		#if(events[i][tag] == key):
+		#	result.append(events[i])
 	return result
 			
 # Busca os ventos pela data de inicio
@@ -170,6 +173,7 @@ def main():
 	getICMC()
 	getUFSCar()
 	searchingForStartDate("25/07/2018")
+
 	
 if __name__ == '__main__':
 	main()
