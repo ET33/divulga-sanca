@@ -102,11 +102,7 @@ def getICMC():
 			
 		postFirebase('/events/ICMC', data)
 
-<<<<<<< HEAD
 
-=======
-# Pega as informações do site do SESC
->>>>>>> master
 def getSESC():
 	url = 'https://www.sescsp.org.br/unidades/ajax/agenda-filtro.action?id=21&maxResults=1000'
 	soup = load(url)
