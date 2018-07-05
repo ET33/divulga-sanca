@@ -36,11 +36,12 @@
 								<i class="material-icons">close</i>
 								<input type="submit" style="display: none;">
 							</div>
-						</form>
+						</nav>
 					</div>
-				</nav>
+				</div>
 			</div>
-		</div>
+		</header>
+	<div class="container blue-grey lighten-5">
 		
 		<div class="row">
 		</div>
@@ -104,6 +105,9 @@
 			{% endfor %}
 		</div>
 	</div>
+	<footer class="page-footer card-panel cyan lighten-3" style="width: 100%; bottom: 0; position: fixed; background-image: linear-gradient(to right top, #189cc0, #00b7c6, #00cfaa, #26e172, #a8eb12);">
+		<p>Contact information: <a href="">email@email.com</a></p>
+	</footer>
 	<!-- Dependencias -->
 	<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
 	<script type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
@@ -120,6 +124,12 @@
 		var elems = document.querySelectorAll('.dropdown-trigger');
 		var instances = M.Dropdown.init(elems);
 		});
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+    		var elems = document.querySelectorAll('.carousel');
+    		var instances = M.Carousel.init(elems, { fullWidth: true, padding: 250 });
+  		});
 	</script>
 </body>
 </html>
