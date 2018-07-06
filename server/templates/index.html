@@ -95,7 +95,7 @@
 			
 			<div class="row">
 				<!-- É aqui aonde vou colocar os cards dos eventos -->
-				<div class="col s12 l12 carousel" style="min-height: 330px;">
+				<div class="col s12 l12 carousel" style="min-height: 360px;">
 					{% for x in cards %}
 						<div class="carousel-item">
 							<div class="card z-depth-3">
@@ -104,6 +104,10 @@
 								</div>
 								<div class="card-content" title="{{ x['title'] }}">
 									<span class="card-title activator grey-text text-darken-4 truncate">{{ x['title'] }}<i class="material-icons right">more_vert</i></span>
+									<span>{{ x['startDate'] }}</span>
+									{% if x['endDate'] %}
+										<span>- {{ x['endDate'] }}</span>
+									{% endif %}
 									<p><a href="{{ x['href'] }}">Link do evento</a></p>
 								</div>
 								<div class="card-reveal">
