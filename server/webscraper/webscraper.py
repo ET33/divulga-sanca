@@ -21,6 +21,10 @@ def postFirebase(path, json):
 	treated_title = re.sub(r'[/]', '_', json['title'])
 	result = fb.patch(path + '/' + treated_title, json)
 
+def postUsers(path, json):
+	treated_email = re.sub(r'[\.]', '_', json['email'])
+	result = fb.patch(path + '/' + treated_email, json)
+
 # Carrega uma página e retorna uma estrutura navegável do bs4
 def load(url):
 	page = requests.get(url)
@@ -135,7 +139,7 @@ def getSESC():
 		data['startDate'] = date_regex[0] + "/" + str(datetime.datetime.now().year)	
 		if len(date_regex) > 1: 
 			data['endDate'] = date_regex[1] + "/" + str(datetime.datetime.now().year)
-		data['tags'] = l.find('strong').text
+		data['tags'] = [l.find('strong').text]
 		data['img'] =  'https://www.sescsp.org.br' + img
 		data['href'] = 'https://www.sescsp.org.br' + l.find('a', {'class' :'desc'})['href']
 
@@ -152,9 +156,8 @@ def searchInDir(path, key, tag):
 	result = []
 	
 	for i in events:
-		print(events[i][tag])
-		#if(events[i][tag] == key):
-		#	result.append(events[i])
+		if(events[i][tag] == key):
+			result.append(events[i])
 	return result
 			
 # Busca os eventos pela data de inicio
@@ -163,7 +166,7 @@ def searchForStartDate(key):
 	# Lista dos eventos encontrados
 	result = []
 	#define os diretórios de busca
-	paths = ['events/ICMC','events/UFSCar', 'events/SESC']
+	paths = ['events/ICMC','events/UFSCar','events/SESC']
 	
 	for i  in paths:
 		result.extend(searchInDir(i,key,'startDate'))
@@ -188,13 +191,30 @@ def searchForTitle(key):
 
 	return result
 
+# Cadastra o usuario na lista dos interressados
+def registerUser(email, key, status):
+	data = {
+		'email': email,
+		'key': key,
+		'status': status
+	}
+
+	postUsers('/users', data)
+
+def confirmUser(email):
+	us = getFirebase('users/')
+
+	for i in us:
+		if(email == i['key']):
+			i['status'] = True
 # Main
 def main():
 	#deleteData('/events/')
-	#getICMC()
-	#getUFSCar()
+	getICMC()
+	getUFSCar()
+	getSESC()
 	#searchForStartDate("25/07/2018")
-	searchForTitle("BIOLOGIA")
+	#searchForTitle("BIOLOGIA")
 
 if __name__ == '__main__':
 	main()
