@@ -89,7 +89,14 @@
 					{% endfor %}
 				</div>
 			</div>
-			
+				<div class="row">
+				<form class="col s12" method="GET" action="/notification" onsubmit="return search.value != ''">
+					<div class="input-field col s6">
+						<input id="search" name="email" type="search" placeholder="E-mail para notificação" required>
+						<input type="submit" style="display: none;">
+					</div>
+				</form>
+			</div>		
 		</div>
 	</main>	
 
