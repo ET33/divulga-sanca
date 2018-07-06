@@ -3,11 +3,13 @@ from bs4 import BeautifulSoup	# Para processar o html
 import json 					# Montar o obj. JSON
 import re 						# Regex em Python
 from firebase import firebase   # firebase da biblioteca python-firebase
+from email_sender import*
 import datetime
 import unicodedata
 
 arte_cultura = ['Cinema e vídeo', 'Dança', 'Música', 'Literatura','Circo', 'Teatro']
 eventos_sociais = ['Ações para a Cidadania','Turismo', 'Esporte e Atividade Física','Alimentação','Tecnologias e Artes']
+newEvents = []
 
 # Conecta com o firebase configurado
 fb = firebase.FirebaseApplication('https://eng-soft-f1c51.firebaseio.com', None)
@@ -22,9 +24,18 @@ def getFirebase(path):
 	return result
 
 # Posta um evento no firebase
-def postFirebase(path, json):
+def postEventFirebase(path, json):
 	treated_title = re.sub(r'[/]', '_', json['title'])
-	result = fb.patch(path + '/' + treated_title, json)
+
+	if fb.get(path + '/' + treated_title, None) == None :
+		fb.patch(path + '/' + treated_title, json)
+		newEvents.append(json)
+
+# Posta um evento no firebase
+def postEmailFirebase(path, json):
+	treated_email = re.sub(r'[.]', '%', json['email'])
+	fb.patch(path + '/' + treated_email, json)
+	
 
 # Carrega uma página e retorna uma estrutura navegável do bs4
 def load(url):
@@ -75,7 +86,7 @@ def getUFSCar():
 		data['href'] = a.get('href')
 		
 		# pega o dicionário, transforma em um JSON e posta no firebase 
-		postFirebase('/events/UFSCar', data)
+		postEventFirebase('/events/UFSCar', data)
 		
 # Pega as informações do site do ICMC
 def getICMC():
@@ -111,7 +122,7 @@ def getICMC():
 		else :					# Link Externo
 			data['href'] = l['href']
 			
-		postFirebase('/events/ICMC', data)
+		postEventFirebase('/events/ICMC', data)
 
 
 def getSESC():
@@ -148,7 +159,7 @@ def getSESC():
 		data['tags'] = [tag]
 		data['img'] =  'https://www.sescsp.org.br' + img
 		data['href'] = 'https://www.sescsp.org.br' + l.find('a', {'class' :'desc'})['href']
-		postFirebase('/events/SESC/', data)
+		postEventFirebase('/events/SESC/', data)
 
 def deleteData(path):
 	result = fb.delete(path, None)
@@ -198,12 +209,15 @@ def searchForTitle(key):
 
 # Main
 def main():
-	deleteData('/events/')
-	getICMC()
-	getUFSCar()
+	#deleteData('/events/')
+	#getICMC()
+	#getUFSCar()
 	getSESC()
+
+	#postEmailFirebase('emails/', {'email' : 'rodrigo.anes.sena@gmail.com'})
 	#searchForStartDate("25/07/2018")
 	#searchForTitle("BIOLOGIA")
+	sendEmails(newEvents)
 
 if __name__ == '__main__':
 	main()
