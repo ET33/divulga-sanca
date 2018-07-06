@@ -22,7 +22,7 @@ def postFirebase(path, json):
 	result = fb.patch(path + '/' + treated_title, json)
 
 def postUsers(path, json):
-	treated_email = re.sub(r'[\.]', '_', json['email'])
+	treated_email = re.sub(r'[\.]', '%', json['email'])
 	result = fb.patch(path + '/' + treated_email, json)
 
 # Carrega uma página e retorna uma estrutura navegável do bs4
@@ -202,11 +202,15 @@ def registerUser(email, key, status):
 	postUsers('/users', data)
 
 def confirmUser(email):
-	us = getFirebase('users/')
+	treated_email = re.sub(r'[\.]', '%', email)
+	user = getFirebase('users/'+treated_email)
+	if user:
+		user['status'] = True
+		fb.patch('users/'+treated_email, user)
+		return True
+	
+	return False
 
-	for i in us:
-		if(email == i['key']):
-			i['status'] = True
 # Main
 def main():
 	#deleteData('/events/')
