@@ -1,4 +1,5 @@
 import json 
+import requests
 from webscraper import*
 
 def sendEmails(newEvents):
@@ -7,11 +8,15 @@ def sendEmails(newEvents):
 		for j in newEvents:
 			emailText += ("*" + str(j['title']) + "\n")
 		print(emailText)
+		
 		allEmails = []
 		emails = getFirebase('emails')
 		for j in emails:
-			print("enviar email para : " + emails[j]['email'])
+			if emails[j]['status'] == True:
+				allEmails.append(emails[j]['email'])
 
+		# TODO: trocar host para domínio
+		r = requests.post("localhost:5000/notificateEvents", data=allEmails)
 
 if __name__ == '__main__':
 	app.run(debug=True)

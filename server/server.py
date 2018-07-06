@@ -1,5 +1,4 @@
 import json
-import secrets 
 from webscraper.webscraper import*
 from flask import Flask
 from flask import render_template, url_for
@@ -72,6 +71,18 @@ def confirmLink(token):
 	if confirmUser(email):
 		return '<h1>Agora você receberá emails de notificação!</h1>'
 	return 'Ocorreu algum erro'
+
+@app.route('/notificateEvents', methods=['POST'])
+def notificateEvents():
+	if request.method == 'POST':
+		email = request.args['emails']
+		print(request.args['emails'])
+		print(email)
+
+		msg = Message('Novos eventos chegaram!', sender="divulgasanca@gmail.com", recipients=[email])
+		msg.body = request.args['text']
+		mail.send(msg)
+	return 'OK'
 
 if __name__ == '__main__':
 	app.run(debug=True)

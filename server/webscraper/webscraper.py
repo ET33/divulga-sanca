@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup	# Para processar o html
 import json 					# Montar o obj. JSON
 import re 						# Regex em Python
 from firebase import firebase   # firebase da biblioteca python-firebase
-from email_sender import*
 import datetime
 import unicodedata
 
@@ -231,10 +230,28 @@ def confirmUser(email):
 	
 	return False
 
+def sendEmails(newEvents):
+	if len(newEvents) > 0:
+		emailText = str(len(newEvents)) + " novos eventos chegaram!\n"
+		for j in newEvents:
+			emailText += ("*" + str(j['title']) + "\n")
+		print(emailText)
+		
+		allEmails = []
+		emails = getFirebase('users')
+		for j in emails:
+			if emails[j]['status'] == True:
+				email_data = {}
+				email_data['emails'] = emails[j]['email']
+				email_data['text'] = emailText
+				r = requests.post("http://localhost:5000/notificateEvents", params=email_data)
+
+		# TODO: trocar host para domínio
+
 # Main
 def main():
-	getICMC()
-	getUFSCar()
+	#getICMC()
+	#getUFSCar()
 	getSESC()
 	sendEmails(newEvents)
 
