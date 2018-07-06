@@ -3,10 +3,13 @@ from bs4 import BeautifulSoup	# Para processar o html
 import json 					# Montar o obj. JSON
 import re 						# Regex em Python
 from firebase import firebase   # firebase da biblioteca python-firebase
+import unicodedata
 
 # Conecta com o firebase configurado
 fb = firebase.FirebaseApplication('https://eng-soft-f1c51.firebaseio.com', None)
-
+#Normalize uma string num formato padrão para ajudar nas comparações de buscas
+def normalizeCaseless(text):
+    return unicodedata.normalize("NFKD", text.casefold())
 # Pega os eventos contidos no nó 'path' do firebase
 def getFirebase(path):
 	result = fb.get(path, None)
@@ -149,27 +152,44 @@ def searchInDir(path, key, tag):
 			result.append(events[i])
 	return result
 			
-# Busca os ventos pela data de inicio
-def searchingForStartDate(key):
+# Busca os eventos pela data de inicio
+def searchForStartDate(key):
 	
 	# Lista dos eventos encontrados
 	result = []
+	#define os diretórios de busca
+	paths = ['events/ICMC','events/UFSCar']
 	
-	# Buscando no ICMC
-	result.extend(searchInDir('events/ICMC',key,'startDate'))
+	for i  in paths:
+		result.extend(searchInDir(i,key,'startDate'))
+
+	return result
 	
-	# Buscando na Ufscar
-	result.extend(searchInDir('events/UFSCar',key,'startDate'))
+# Busca eventos pelo título
+def searchForTitle(key):
 	
-	for r in result:
-		print(r['title'])
+	#lista dos eventos encontrados
+	result = []
+	#define os diretórios de busca
+	paths = ['events/ICMC','events/UFSCar']
+	
+	#busca nos diretorios definidos
+	for i in paths:
+		events = getFirebase(i)
+		for j in events:
+			title = events[j]['title']
+			if normalizeCaseless(key) in normalizeCaseless(title):
+				result.append(events[j])
+
+	return result
 
 # Main
 def main():
-	deleteData('/events/')
-	getICMC()
-	getUFSCar()
-	searchingForStartDate("25/07/2018")
-	
+	#deleteData('/events/')
+	#getICMC()
+	#getUFSCar()
+	#searchForStartDate("25/07/2018")
+	#searchForTitle("BIOLOGIA")
+
 if __name__ == '__main__':
 	main()

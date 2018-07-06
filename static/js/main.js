@@ -12,6 +12,7 @@ function configFirebase(){
 	firebase.initializeApp(config);
 }
 
+
 /* 
 Pega os nós contidos no nó 'events' do firebase 
 e roda a função parseEvent para cada um deles
@@ -44,14 +45,24 @@ function getEvents(){
         parseEvent(JSON.parse(snapshot._e.T));
 	});*/
 	
-	firebase.database().ref('/events').on('child_added', function(snapshot) {
+	
+	/*document.getElementById("search").addEventListener("keypress", function(e){
+		var key = e.which || e.keyCode;
+		if (key === 13) { // 13 e enter
+			//textBox contem o input do usuario
+			var textBox = document.getElementById('search').value;
+			console.log(textBox);
+		}
+	});*/
+	
+	/*firebase.database().ref('/events').on('child_added', function(snapshot) {
 		var addedEvent = JSON.stringify(snapshot.val());
 		addedEvent = JSON.parse(addedEvent);
 		for (key in addedEvent) {
 			console.log(addedEvent[key]);
 			parseEvent(addedEvent[key]);
 		}
-	});
+	});*/
 }
 
 /*
