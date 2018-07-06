@@ -1,4 +1,3 @@
-import forms
 import json 
 from webscraper.webscraper import*
 from flask import Flask
