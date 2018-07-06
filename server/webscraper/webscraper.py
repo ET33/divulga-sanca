@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup	# Para processar o html
 import json 					# Montar o obj. JSON
 import re 						# Regex em Python
 from firebase import firebase   # firebase da biblioteca python-firebase
+import datetime
 
 # Conecta com o firebase configurado
 fb = firebase.FirebaseApplication('https://eng-soft-f1c51.firebaseio.com', None)
@@ -117,26 +118,27 @@ def getSESC():
 	for l in ll:
 		children = l.findChildren()
 		
-		# busca a data do evento  
-		date = l.find_all('span')[1:3]
-		# aplica um regex na data para retirar espaços e pulos de linha desnecessários
-		for i in range(0, 2):
-			date[i] = re.search(r'([\S].*[\S])', date[i].text).group()
-		#junta as informações de dia com as informações de horário em uma string
-		date_formated = date[0] + ' ' + date[1]
+		# pega a informação de data no HTML
+		date = l.find('div', {"class": "line-infos line-infos-list"}).find('span').text
 
+		# aplica um regex na data para encontrar a data de início e possível fim do evento
+		date_regex = re.findall(r'../..', date)
+		
 		#busca e formata a informação de endereço da imagem
 		img = re.search(r'url\((.*)\)', children[4]['style']).group(1)
 
 		data = {}
 		data['title'] = children[3]['data-ga-action']
-		data['date'] = date_formated
+		data['startDate'] = date_regex[0] + "/" + str(datetime.datetime.now().year)	
+		if len(date_regex) > 1: 
+			data['endDate'] = date_regex[1] + "/" + str(datetime.datetime.now().year)
 		data['tags'] = l.find('strong').text
 		data['img'] =  'https://www.sescsp.org.br' + img
 		data['href'] = 'https://www.sescsp.org.br' + l.find('a', {'class' :'desc'})['href']
-		
+
 		postFirebase('/events/SESC', data)
-	
+		
+
 def deleteData(path):
 	result = fb.delete(path, None)
 
@@ -173,7 +175,7 @@ def main():
 	getICMC()
 	getUFSCar()
 	getSESC()
-	searchingForStartDate("25/07/2018")
+	#searchingForStartDate("25/07/2018")
 
 	
 if __name__ == '__main__':
