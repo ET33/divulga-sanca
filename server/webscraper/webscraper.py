@@ -234,7 +234,7 @@ def sendEmails(newEvents):
 	if len(newEvents) > 0:
 		emailText = str(len(newEvents)) + " novos eventos chegaram!\n"
 		for j in newEvents:
-			emailText += ("*" + str(j['title']) + "\n")
+			emailText += ("*" + str(j['title']) + "\n" + "Link: " + str(j['href']) )
 		print(emailText)
 		
 		allEmails = []

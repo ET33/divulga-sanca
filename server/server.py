@@ -44,8 +44,8 @@ def search():
 			return response
 
 # Manda um email de confirmação para o usuário
-@app.route('/confirmEmail', methods=['GET'])
-def confirmEmail():
+@app.route('/notification', methods=['GET'])
+def notification():
 	if request.method == 'GET':
 		email = request.args.get('email', '')
 		msg = Message('Confirm mail', sender="divulgasanca@gmail.com", recipients=[email])
@@ -83,6 +83,8 @@ def notificateEvents():
 		msg.body = request.args['text']
 		mail.send(msg)
 	return 'OK'
+
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
