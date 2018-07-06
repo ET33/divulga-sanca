@@ -61,55 +61,31 @@
 			</div>
 			
 			<div class="row">
-				<div class="col s2">
-					<form action="#">
-						<p>
-						  <label>
-							<input type="checkbox" />
-							<span class="flow-text">ICMC</span>
-						  </label>
-						</p>
-					</form>
-				</div>
-				<div class="col s2">
-					<form action="#">
-						<p>
-						  <label>
-							<input type="checkbox" />
-							<span class="flow-text">UFSCar</span>
-						  </label>
-						</p>
-					</form>
-				</div>
-				<div class="col s2">
-					<form action="#">
-						<p>
-						  <label>
-							<input type="checkbox" />
-							<span class="flow-text">EESC</span>
-						  </label>
-						</p>
-					</form>
-				</div>
 			</div>
 			
 			<div class="row">
 				<!-- É aqui aonde vou colocar os cards dos eventos -->
-				<div class="col s12 l12 carousel" style="min-height: 360px;">
+				<div class="col s12 l12 carousel" style="min-height: 440px;">
 					{% for x in cards %}
 						<div class="carousel-item">
 							<div class="card z-depth-3">
 								<div class="card-image waves-effect waves-block waves-light">
 									<img class="activator" src="{{ x['img'] }}">
 								</div>
-								<div class="card-content" title="{{ x['title'] }}">
-									<span class="card-title activator grey-text text-darken-4 truncate">{{ x['title'] }}<i class="material-icons right">more_vert</i></span>
-									<span>{{ x['startDate'] }}</span>
-									{% if x['endDate'] %}
-										<span>- {{ x['endDate'] }}</span>
-									{% endif %}
-									<p><a href="{{ x['href'] }}">Link do evento</a></p>
-								</div>
+								<form action="/googlesearch" method="GET">
+									<div class="card-content" id="gsearch" name="gsearch" title="{{ x['title'] }}">
+										<span class="card-title activator grey-text text-darken-4 truncate">{{ x['title'] }}<i class="material-icons right">more_vert</i></span>
+										<span>{{ x['startDate'] }}</span>
+										{% if x['endDate'] %}
+											<span>- {{ x['endDate'] }}</span>
+										{% endif %}
+										<p><a href="{{ x['href'] }}">Link do evento</a></p>
+										<!-- <button type="submit" class="btn-floating halfway-fab waves-effect waves-light blue"> -->
+										<!-- <i class="material-icons right">event</i> -->
+										<!-- <input type="text" class="hide" name="titulo" value="{{ x['title'] }}"> -->
+										<!-- <input type="text" class="hide" name="data" value="{{ x['date'] }}"> -->
+									</div>
+								</form>
 								<div class="card-reveal">
 									<span class="card-title grey-text text-darken-4">{{ x['title'] }}<i class="material-icons right">close</i></span>
 									{% for tag in x['tags'] %}
@@ -120,6 +96,15 @@
 						</div>
 					{% endfor %}
 				</div>
+			</div>
+			
+			<div class="row">
+				<form class="col s12" method="GET" action="/notification" onsubmit="return search.value != ''">
+					<div class="input-field col s6">
+						<input id="search" name="email" type="search" placeholder="E-mail para notificação" required>
+						<input type="submit" style="display: none;">
+					</div>
+				</form>
 			</div>
 			
 		</div>
