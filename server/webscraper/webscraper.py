@@ -3,13 +3,15 @@ from bs4 import BeautifulSoup	# Para processar o html
 import json 					# Montar o obj. JSON
 import re 						# Regex em Python
 from firebase import firebase   # firebase da biblioteca python-firebase
+import datetime
 import unicodedata
 
 # Conecta com o firebase configurado
 fb = firebase.FirebaseApplication('https://eng-soft-f1c51.firebaseio.com', None)
 #Normalize uma string num formato padrão para ajudar nas comparações de buscas
 def normalizeCaseless(text):
-    return unicodedata.normalize("NFKD", text.casefold())
+	return unicodedata.normalize("NFKD", text.casefold())
+
 # Pega os eventos contidos no nó 'path' do firebase
 def getFirebase(path):
 	result = fb.get(path, None)
@@ -17,7 +19,8 @@ def getFirebase(path):
 
 # Posta um evento no firebase
 def postFirebase(path, json):
-	result = fb.post(path, json)
+	treated_title = re.sub(r'[/]', '_', json['title'])
+	result = fb.patch(path + '/' + treated_title, json)
 
 # Carrega uma página e retorna uma estrutura navegável do bs4
 def load(url):
@@ -60,7 +63,8 @@ def getUFSCar():
 			
 		data['title'] = children[1].get_text()
 		data['tags'] = ['UFSCar', 'Eventos']
-		
+		# Coloca a imagem do logo da ufscar para o dado
+		data['img'] = "http://tecnologiademateriais.com.br/portaltm/wp-content/uploads/2018/02/logo_ufscar.png"
 		#Dentre as informações contidas em a...
 		a = l.find('a')		
 		#pegar o href que contem o link
@@ -105,7 +109,7 @@ def getICMC():
 			
 		postFirebase('/events/ICMC', data)
 
-# Pega as informações do site do SESC
+
 def getSESC():
 	url = 'https://www.sescsp.org.br/unidades/ajax/agenda-filtro.action?id=21&maxResults=1000'
 	soup = load(url)
@@ -118,26 +122,27 @@ def getSESC():
 	for l in ll:
 		children = l.findChildren()
 		
-		# busca a data do evento  
-		date = l.find_all('span')[1:3]
-		# aplica um regex na data para retirar espaços e pulos de linha desnecessários
-		for i in range(0, 2):
-			date[i] = re.search(r'([\S].*[\S])', date[i].text).group()
-		#junta as informações de dia com as informações de horário em uma string
-		date_formated = date[0] + ' ' + date[1]
+		# pega a informação de data no HTML
+		date = l.find('div', {"class": "line-infos line-infos-list"}).find('span').text
 
+		# aplica um regex na data para encontrar a data de início e possível fim do evento
+		date_regex = re.findall(r'../..', date)
+		
 		#busca e formata a informação de endereço da imagem
 		img = re.search(r'url\((.*)\)', children[4]['style']).group(1)
 
 		data = {}
 		data['title'] = children[3]['data-ga-action']
-		data['date'] = date_formated
+		data['startDate'] = date_regex[0] + "/" + str(datetime.datetime.now().year)	
+		if len(date_regex) > 1: 
+			data['endDate'] = date_regex[1] + "/" + str(datetime.datetime.now().year)
 		data['tags'] = l.find('strong').text
 		data['img'] =  'https://www.sescsp.org.br' + img
 		data['href'] = 'https://www.sescsp.org.br' + l.find('a', {'class' :'desc'})['href']
-		
+
 		postFirebase('/events/SESC', data)
-	
+		
+
 def deleteData(path):
 	result = fb.delete(path, None)
 
@@ -148,8 +153,9 @@ def searchInDir(path, key, tag):
 	result = []
 	
 	for i in events:
-		if(events[i][tag] == key):
-			result.append(events[i])
+		print(events[i][tag])
+		#if(events[i][tag] == key):
+		#	result.append(events[i])
 	return result
 			
 # Busca os eventos pela data de inicio
@@ -158,7 +164,7 @@ def searchForStartDate(key):
 	# Lista dos eventos encontrados
 	result = []
 	#define os diretórios de busca
-	paths = ['events/ICMC','events/UFSCar']
+	paths = ['events/ICMC','events/UFSCar', 'events/SESC']
 	
 	for i  in paths:
 		result.extend(searchInDir(i,key,'startDate'))
@@ -171,7 +177,7 @@ def searchForTitle(key):
 	#lista dos eventos encontrados
 	result = []
 	#define os diretórios de busca
-	paths = ['events/ICMC','events/UFSCar']
+	paths = ['events/ICMC','events/UFSCar', 'events/SESC']
 	
 	#busca nos diretorios definidos
 	for i in paths:
@@ -189,7 +195,7 @@ def main():
 	#getICMC()
 	#getUFSCar()
 	#searchForStartDate("25/07/2018")
-	#searchForTitle("BIOLOGIA")
+	searchForTitle("BIOLOGIA")
 
 if __name__ == '__main__':
 	main()

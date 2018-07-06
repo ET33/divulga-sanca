@@ -7,21 +7,21 @@ from flask import request
 app = Flask(__name__, template_folder='templates')
 
 with app.test_request_context('/searchresult', method='GET'):
-    assert request.path == '/searchresult'
-    assert request.method == 'GET'
+   	assert request.path == '/searchresult'
+   	assert request.method == 'GET'
 	
 @app.route('/')
 def home():
-	paths = ['/events/ICMC','/events/UFSCar']
+	paths = ['/events/ICMC','/events/UFSCar','events/SESC']
 	allEvents = []
 
 	for i in paths:
 		events = getFirebase(i)
 		for j in events:
 			allEvents.append(events[j])
-    
+
 	return render_template('index.html', cards=allEvents)
-	
+
 @app.route('/searchresult', methods=['GET'])
 def search():
 	if request.method == 'GET':
