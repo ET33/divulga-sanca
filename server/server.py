@@ -12,7 +12,7 @@ with app.test_request_context('/searchresult', method='GET'):
 	
 @app.route('/')
 def home():
-	paths = ['/events/ICMC','/events/UFSCar','events/SESC']
+	paths = ['events/ICMC','events/UFSCar', 'events/SESC']
 	allEvents = []
 
 	for i in paths:

@@ -6,9 +6,13 @@ from firebase import firebase   # firebase da biblioteca python-firebase
 import datetime
 import unicodedata
 
+arte_cultura = ['Cinema e vídeo', 'Dança', 'Música', 'Literatura','Circo', 'Teatro']
+eventos_sociais = ['Ações para a Cidadania','Turismo', 'Esporte e Atividade Física','Alimentação','Tecnologias e Artes']
+
 # Conecta com o firebase configurado
 fb = firebase.FirebaseApplication('https://eng-soft-f1c51.firebaseio.com', None)
 #Normalize uma string num formato padrão para ajudar nas comparações de buscas
+
 def normalizeCaseless(text):
 	return unicodedata.normalize("NFKD", text.casefold())
 
@@ -121,7 +125,12 @@ def getSESC():
 	#percorre a lista e monta um dicionário de cada um dos eventos
 	for l in ll:
 		children = l.findChildren()
-		
+		tag	= ""	
+		if l.find('strong').text in arte_cultura:
+			tag = "Arte e Cultura"
+		else:
+			tag = "Eventos Sociais"
+
 		# pega a informação de data no HTML
 		date = l.find('div', {"class": "line-infos line-infos-list"}).find('span').text
 
@@ -136,12 +145,10 @@ def getSESC():
 		data['startDate'] = date_regex[0] + "/" + str(datetime.datetime.now().year)	
 		if len(date_regex) > 1: 
 			data['endDate'] = date_regex[1] + "/" + str(datetime.datetime.now().year)
-		data['tags'] = l.find('strong').text
+		data['tags'] = [tag]
 		data['img'] =  'https://www.sescsp.org.br' + img
 		data['href'] = 'https://www.sescsp.org.br' + l.find('a', {'class' :'desc'})['href']
-
-		postFirebase('/events/SESC', data)
-		
+		postFirebase('/events/SESC/', data)
 
 def deleteData(path):
 	result = fb.delete(path, None)
@@ -165,7 +172,7 @@ def searchForStartDate(key):
 	result = []
 	#define os diretórios de busca
 	paths = ['events/ICMC','events/UFSCar', 'events/SESC']
-	
+
 	for i  in paths:
 		result.extend(searchInDir(i,key,'startDate'))
 
@@ -191,11 +198,12 @@ def searchForTitle(key):
 
 # Main
 def main():
-	#deleteData('/events/')
-	#getICMC()
-	#getUFSCar()
+	deleteData('/events/')
+	getICMC()
+	getUFSCar()
+	getSESC()
 	#searchForStartDate("25/07/2018")
-	searchForTitle("BIOLOGIA")
+	#searchForTitle("BIOLOGIA")
 
 if __name__ == '__main__':
 	main()
