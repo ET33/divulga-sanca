@@ -21,7 +21,6 @@ def home():
 			allEvents.append(events[j])
 
 	return render_template('index.html', cards=allEvents)
-	
 
 @app.route('/searchresult', methods=['GET'])
 def search():

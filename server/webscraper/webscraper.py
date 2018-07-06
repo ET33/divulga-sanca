@@ -11,6 +11,7 @@ fb = firebase.FirebaseApplication('https://eng-soft-f1c51.firebaseio.com', None)
 #Normalize uma string num formato padrão para ajudar nas comparações de buscas
 def normalizeCaseless(text):
 	return unicodedata.normalize("NFKD", text.casefold())
+
 # Pega os eventos contidos no nó 'path' do firebase
 def getFirebase(path):
 	result = fb.get(path, None)
