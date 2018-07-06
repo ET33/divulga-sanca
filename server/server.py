@@ -3,55 +3,36 @@ from webscraper.webscraper import*
 from flask import Flask
 from flask import render_template
 from flask import request
+
 app = Flask(__name__, template_folder='templates')
-
-	
-@app.route('/')
-def home():
-	events = getFirebase('/events/ICMC')
-	allEvents = []
-
-	for i in events:
-		allEvents.append(events[i])
-
-	events = getFirebase('/events/UFSCar')
-	
-	for i in events:
-		allEvents.append(events[i])
-	
-    
-	return render_template('index.html', cards=allEvents)
-	
 
 with app.test_request_context('/searchresult', method='GET'):
     assert request.path == '/searchresult'
     assert request.method == 'GET'
 	
+@app.route('/')
+def home():
+	paths = ['/events/ICMC','/events/UFSCar']
+	allEvents = []
+
+	for i in paths:
+		events = getFirebase(i)
+		for j in events:
+			allEvents.append(events[j])
+    
+	return render_template('index.html', cards=allEvents)
 	
+
 @app.route('/searchresult', methods=['GET'])
 def search():
 	if request.method == 'GET':
-		search = request.args.get('search', '')
-	else:
-		search = 'erro'
-	
-	
-	# events = getFirebase('/events/ICMC')
-	# allEvents = []
-		
-	# for i in events:
-		# if search in events[i]:
-			# allEvents.append(events[i])
-
-	# events = getFirebase('/events/UFSCar')
-	
-	# for i in events:
-		# if search in events[i]:
-			# allEvents.append(events[i])
-	
-	return search
-	
-
+		key = request.args.get('search', '')
+		result = searchForTitle(key)
+		if(len(result) > 0):
+			return render_template('index.html', cards=result)
+		else:
+			response = "Nenhum resultado encontrado pela chave: " + key + ". Tente mais uma vez."
+			return response
 
 if __name__ == '__main__':
 	app.run(debug=True)
