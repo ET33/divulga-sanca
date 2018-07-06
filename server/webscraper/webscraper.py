@@ -10,7 +10,7 @@ import unicodedata
 fb = firebase.FirebaseApplication('https://eng-soft-f1c51.firebaseio.com', None)
 #Normalize uma string num formato padrão para ajudar nas comparações de buscas
 def normalizeCaseless(text):
-    return unicodedata.normalize("NFKD", text.casefold())
+	return unicodedata.normalize("NFKD", text.casefold())
 # Pega os eventos contidos no nó 'path' do firebase
 def getFirebase(path):
 	result = fb.get(path, None)
@@ -163,7 +163,7 @@ def searchForStartDate(key):
 	# Lista dos eventos encontrados
 	result = []
 	#define os diretórios de busca
-	paths = ['events/ICMC','events/UFSCar']
+	paths = ['events/ICMC','events/UFSCar', 'events/SESC']
 	
 	for i  in paths:
 		result.extend(searchInDir(i,key,'startDate'))
@@ -176,7 +176,7 @@ def searchForTitle(key):
 	#lista dos eventos encontrados
 	result = []
 	#define os diretórios de busca
-	paths = ['events/ICMC','events/UFSCar']
+	paths = ['events/ICMC','events/UFSCar', 'events/SESC']
 	
 	#busca nos diretorios definidos
 	for i in paths:
@@ -194,7 +194,7 @@ def main():
 	#getICMC()
 	#getUFSCar()
 	#searchForStartDate("25/07/2018")
-	#searchForTitle("BIOLOGIA")
+	searchForTitle("BIOLOGIA")
 
 if __name__ == '__main__':
 	main()
